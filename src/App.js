@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          This is react application from Docker and then to the K8scluster .
+          This is react application pushing from the scm to the K8s cluster .
         </p>
         <a
           className="App-link"
