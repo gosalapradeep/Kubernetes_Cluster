@@ -14,10 +14,11 @@ pipeline {
 				sh 'docker build -t gosalapradeep/reactapp:$BUILD_NUMBER /home/ubuntu/Kubernetes_Cluster';
 		   }
 		}
-	    stage ('Push the image') {
-		    steps {
-		            sh 'docker push gosalapradeep/reactapp:$BUILD_NUMBER'
-		    }
-	    }
+	     stage('Push Docker Image'){
+                withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
+                  sh "docker login -u dockerhandson -p ${Docker_Hub_Pwd}"
+        }
+                 sh 'docker push dockerhandson/java-web-app'
+     }
     }
 }
