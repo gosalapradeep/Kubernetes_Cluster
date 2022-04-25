@@ -6,7 +6,7 @@ pipeline {
         stage('SCM-checkout') {
             steps {
 
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Ongraph-Pradeep/React_Docker']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'd4af5848-1f0e-4f40-a560-34ec92eeefff', url: 'https://github.com/gosalapradeep/Kubernetes_Cluster.git']]])
             }
         }
 	    stage('build image') {
