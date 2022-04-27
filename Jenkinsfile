@@ -1,24 +1,23 @@
-pipeline {
-    agent any
-    
-
-    stages {
-        stage('SCM-checkout') {
-            steps {
-
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'd4af5848-1f0e-4f40-a560-34ec92eeefff', url: 'https://github.com/gosalapradeep/Kubernetes_Cluster.git']]])
-            }
-        }
-	    stage('build image') {
-		    steps {
-				sh 'docker build -t gosalapradeep/reactapp:$BUILD_NUMBER /home/ubuntu/Kubernetes_Cluster';
-		   }
+pipeline{
+agent any
+	stages{
+		stage(checkout code) {
+			steps{
+			   checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub_Password', url: 'https://github.com/gosalapradeep/Kubernetes_Cluster.git']]])
+			}
 		}
-	     stage('Push Docker Image'){
-                withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
-                  sh "docker login -u gosalapradeep -p ${Docker_Hub_Pwd}"
-        }
-                 sh 'docker push gosalapradeep/reactapp:$BUILD_NUMBER'
-     }
-    }
+		stage(Build the Image) {
+			steps{
+			  sh "docker build -t gosalapradeep/reactapp:$BUILD_NUMBER /home/ubuntu/Kubernetes_Cluster"
+			}
+		}
+		stage(Push the code) {
+			steps{
+			  withCredentials([usernamePassword(credentialsId: 'DockerPass', passwordVariable: 'DockerHubPassword', usernameVariable: 'gosalapradeep')]) {
+				  sh "docker login -u gosalapradeep -p ${DockerHubPassword}"
+			  }
+				sh "docker push gosalapradeep/reactapp:$BUILD_NUMBER"
+			}
+		}
+	}
 }
