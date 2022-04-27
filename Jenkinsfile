@@ -1,7 +1,7 @@
 pipeline {
 environment {
 imagename = "gosalapradeep/reactapp"
-registryCredential = 'Docker_Password'
+registryCredential = 'Docker_Hub_Password'
 dockerImage = ''
 }
 agent any
