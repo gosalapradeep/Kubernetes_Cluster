@@ -1,15 +1,31 @@
-node {
-  
-   stage("checkout code"){
-       checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub_Password', url: 'https://github.com/gosalapradeep/Kubernetes_Cluster.git']]])
-   }
-   stage("Build Image"){
-       sh "docker build -t gosalapradeep/reactapp:$BUILD_NUMBER /home/ubuntu/Kubernetes_Cluster"
-   }
-   stage("Push the Image"){
-       withCredentials([string(credentialsId: 'Docker_Password', variable: 'Docker_Password')]) {
-         sh "docker login -u gosalapradeep -p ${Docker_Password}" 
-       }
-       sh "docker push gosalapradeep/reactapp:$BUILD_NUMBER"
-   }
+pipeline {
+environment {
+imagename = "gosalapradeep/reactapp"
+registryCredential = 'Docker_Password'
+dockerImage = ''
+}
+agent any
+stages {
+stage('Cloning Git') {
+steps {
+git([url: 'https://github.com/gosalapradeep/Kubernetes_Cluster.git', branch: 'master', credentialsId: 'GitHub_Password'])
+}
+}
+stage('Building image') {
+steps{
+script {
+dockerImage = docker.build imagename
+}
+}
+}
+stage('Deploy Image') {
+steps{
+script {
+docker.withRegistry( '', registryCredential ) {
+dockerImage.push("$BUILD_NUMBER")
+dockerImage.push('latest')
+}
+}
+}
+}
 }
