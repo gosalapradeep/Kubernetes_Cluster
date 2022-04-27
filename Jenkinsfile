@@ -29,3 +29,4 @@ dockerImage.push('latest')
 }
 }
 }
+}
