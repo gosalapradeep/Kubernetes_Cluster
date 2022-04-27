@@ -8,7 +8,7 @@ node {
    }
    stage("Push the Image"){
        withCredentials([string(credentialsId: 'Docker_Password', variable: 'Docker_Password')]) {
-         sh "docker login -u gosalapradeep -p ${Docker_Hub_Password}" 
+         sh "docker login -u gosalapradeep -p ${Docker_Password}" 
        }
        sh "docker push gosalapradeep/reactapp:$BUILD_NUMBER"
    }
