@@ -13,8 +13,8 @@ agent any
 		}
 		stage("Push the code") {
 			steps{
-			  withCredentials([usernamePassword(credentialsId: 'DockerPass', passwordVariable: 'DockerHubPassword', usernameVariable: 'gosalapradeep')]) {
-				  sh "echo "$DockerHubPassword" | docker login -u gosalapradeep --password-stdin"
+			  withCredentials([usernameColonPassword(credentialsId: 'Docker_Hub_Password', variable: 'Docker_Hub_Password')]) {
+				  sh "docker login -u gosalapradeep -p ${Dokcer_Hub_Password}"
 			  }
 				sh "docker push gosalapradeep/reactapp:$BUILD_NUMBER"
 			}
